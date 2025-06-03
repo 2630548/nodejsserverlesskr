@@ -1,41 +1,10 @@
 {
-  "name": "@3kmfi6hp/nodejs-proxy",
-  "version": "1.0.17",
-  "description": "A Node.js vless proxy",
-  "keywords": [
-    "vless",
-    "proxy",
-    "tunnel",
-    "v2ray",
-    "v2ray-proxy",
-    "nodejs-proxy",
-    "nodejs-v2ray",
-    "nodejs-vless",
-    "nodejs-vless-proxy"
-  ],
-  "main": "ed.js",
-  "bin": {
-    "nodejs-proxy": "./cli.js"
+  "name": "vercel-proxy",
+  "version": "1.0.0",
+  "dependencies": {
+    "http-proxy-middleware": "^2.0.6"
   },
   "scripts": {
-    "dev": "npx nodejs-proxy",
-    "build": "next build",
-    "start": "NODE_ENV=production npx nodejs-proxy"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/3Kmfi6HP/nodejs-proxy"
-  },
-  "dependencies": {
-    "tslib": "^2.6.0",
-    "uuid": "^9.0.0",
-    "ws": "^8.13.0",
-    "yargs": "^17.7.2",
-    "next": "^14.2.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
-  },
-  "devDependencies": {
-    "uglify-js": "^3.17.4"
+    "start": "vercel dev"
   }
 }
