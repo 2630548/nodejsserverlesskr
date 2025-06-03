@@ -3,6 +3,7 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 
 module.exports = (req, res) => {
   const targetUrl = req.query.url; // 从查询参数获取目标 URL
+  const churl = '^/api';
   if (!targetUrl) {
     res.status(400).json({ error: 'URL 参数缺失' });
     return;
@@ -13,7 +14,7 @@ module.exports = (req, res) => {
     target: targetUrl,
     changeOrigin: true,
     pathRewrite: {
-      '^/api' : '', // 移除路径中的 /api/proxy
+      churl : '', // 移除路径中的 /api/proxy
     },
     onProxyReq: (proxyReq) => {
       // 可选：设置额外的请求头
