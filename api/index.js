@@ -13,7 +13,7 @@ module.exports = (req, res) => {
     target: targetUrl,
     changeOrigin: true,
     pathRewrite: {
-      '^/api/proxy': '', // 移除路径中的 /api/proxy
+      '^/api': '', // 移除路径中的 /api/proxy
     },
     onProxyReq: (proxyReq) => {
       // 可选：设置额外的请求头
