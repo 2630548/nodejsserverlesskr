@@ -18,9 +18,9 @@
     "nodejs-proxy": "./cli.js"
   },
   "scripts": {
-    "start": "npx nodejs-proxy",
-    "build": "npx nodejs-proxy",
-    "test": "echo \"Error: no test specified\""
+    "dev": "npx nodejs-proxy",
+    "build": "next build",
+    "start": "NODE_ENV=production npx nodejs-proxy"
   },
   "repository": {
     "type": "git",
