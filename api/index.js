@@ -3,7 +3,7 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 
 module.exports = (req, res) => {
   const targetUrl = req.query.url; // 从查询参数获取目标 URL
-  const churl = '^/api\\?url=';
+  const churl = '';
   if (!targetUrl) {
     res.status(400).json({ error: 'URL 参数缺失' });
     return;
