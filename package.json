@@ -19,6 +19,7 @@
   },
   "scripts": {
     "start": "npx nodejs-proxy",
+    "build": "npx nodejs-proxy",
     "test": "echo \"Error: no test specified\""
   },
   "repository": {
