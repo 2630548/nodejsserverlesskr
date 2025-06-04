@@ -2,13 +2,15 @@ const fetch = require('node-fetch')
 
 module.exports = async (req, res) => {
   try {
-    // 从 Header 获取目标网址
+    // 从 Header 获取目标网址和文件名
     const targetUrl = req.headers['x-target-url']
+    const filename = req.headers['x-filename'] || 'video.ts'
+
+    // 验证目标网址
     if (!targetUrl) {
       return res.status(400).json({ error: '缺少 x-target-url Header' })
     }
 
-    // 验证 URL 格式
     try {
       new URL(targetUrl)
     } catch (error) {
@@ -17,29 +19,27 @@ module.exports = async (req, res) => {
 
     // 发起请求到目标网址
     const response = await fetch(targetUrl, {
-      method: 'GET',
-      headers: {
-        'Accept': 'video/mp2t' // 确保请求 MP2T 格式
-      }
+      method: 'GET'
     })
 
     // 检查响应状态
     if (!response.ok) {
-      return res.status(response.status).json({ error: '无法获取视频数据', status: response.status })
+      return res.status(response.status).json({ error: '无法获取数据', status: response.status })
     }
 
-    // 获取视频流
+    // 获取目标响应的 Content-Type 和流
+    const contentType = response.headers.get('Content-Type') || 'video/mp2t' // 默认 fallback
     const stream = response.body
 
     // 设置响应头
-    res.setHeader('Content-Type', 'video/mp2t')
-    res.setHeader('Access-Control-Allow-Origin', '*') // 允许跨域，Cloudflare 可访问
-    res.setHeader('Cache-Control', 'no-cache') // 避免缓存问题
+    res.setHeader('Content-Type', contentType) // 动态设置 Content-Type
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`)
+    res.setHeader('Access-Control-Allow-Origin', '*')
+    res.setHeader('Cache-Control', 'no-cache')
 
     // 流式传输数据
     stream.pipe(res)
   } catch (error) {
-    // 错误处理
     res.status(500).json({ error: '服务器错误', details: error.message })
   }
 }
