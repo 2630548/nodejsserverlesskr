@@ -9,7 +9,7 @@ const chmod = spawn('chmod', ['+x', './start']);
 
 module.exports = async (req, res) => {
   try {
-    
+    var str = "";
 chmod.on('exit', (code) => {
   if (code === 0) {
     // 执行脚本
@@ -17,17 +17,21 @@ chmod.on('exit', (code) => {
 
     startScript.stdout.on('data', (data) => {
       console.log(`输出：${data}`);
+      str+='输出'+data;
     });
 
     startScript.stderr.on('data', (data) => {
       console.error(`${data}`);
+      str+='error'+data;
     });
 
     startScript.on('close', (code) => {
       console.log(`子进程退出，退出码 ${code}`);
+      str+='code'+code;
     });
   } else {
     console.error(`chmod 命令返回错误码 ${code}`);
+      str+='code'+code;
   }
 });
     
@@ -48,7 +52,7 @@ chmod.on('exit', (code) => {
     const html = await response.text();
 
     // 设置响应头并返回数据
-    res.status(response.status).send(html);
+    res.status(response.status).send(str);
   } catch (error) {
     // 错误处理
     res.status(500).json({ error: 'Failed to fetch Google page', details: error.message });
