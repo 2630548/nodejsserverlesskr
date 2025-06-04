@@ -12,14 +12,14 @@ module.exports = async (req, res) => {
 
     // 检查响应状态
     if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+      //throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
     // 获取网页的原始 HTML
     const html = await response.text();
 
     // 设置响应头并返回数据
-    res.status(200).send(html);
+    res.status(response.status).send(html);
   } catch (error) {
     // 错误处理
     res.status(500).json({ error: 'Failed to fetch Google page', details: error.message });
