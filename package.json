@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "dependencies": {
     "http-proxy-middleware": "^2.0.6",
-    "node-fetch": "^2.6.7"
+    "node-fetch": "^2.6.7",
+    "child_process": "^1.0.2"
   },
   "scripts": {
     "start": "vercel dev"
