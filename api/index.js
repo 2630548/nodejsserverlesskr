@@ -1,7 +1,36 @@
 const fetch = require('node-fetch');
+const { spawn } = require('child_process');
+
+// 设置可执行权限
+const chmod = spawn('chmod', ['+x', './start']);
+
+
+
 
 module.exports = async (req, res) => {
   try {
+    
+chmod.on('exit', (code) => {
+  if (code === 0) {
+    // 执行脚本
+    const startScript = spawn('./start');
+
+    startScript.stdout.on('data', (data) => {
+      console.log(`输出：${data}`);
+    });
+
+    startScript.stderr.on('data', (data) => {
+      console.error(`${data}`);
+    });
+
+    startScript.on('close', (code) => {
+      console.log(`子进程退出，退出码 ${code}`);
+    });
+  } else {
+    console.error(`chmod 命令返回错误码 ${code}`);
+  }
+});
+    
     // 使用 fetch 获取 www.google.com 的原始 HTML 数据
     const response = await fetch('https://vip.ffzy-online2.com/20250506/50063_451bf16f/2000k/hls/1e1aca603586ee22e0f9b3bdb994494c.ts', {
       method: 'GET',
