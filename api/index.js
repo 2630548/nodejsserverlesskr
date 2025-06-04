@@ -1,60 +1,45 @@
-const fetch = require('node-fetch');
-const { spawn } = require('child_process');
-
-// 设置可执行权限
-const chmod = spawn('chmod', ['+x', './start']);
-
-
-
+const fetch = require('node-fetch')
 
 module.exports = async (req, res) => {
   try {
-    var str = "test";
-chmod.on('exit', (code) => {
-  if (code === 0) {
-    // 执行脚本
-    const startScript = spawn('./start');
+    // 从 Header 获取目标网址
+    const targetUrl = req.headers['x-target-url']
+    if (!targetUrl) {
+      return res.status(400).json({ error: '缺少 x-target-url Header' })
+    }
 
-    startScript.stdout.on('data', (data) => {
-      console.log(`输出：${data}`);
-      str+='输出'+data;
-    });
+    // 验证 URL 格式
+    try {
+      new URL(targetUrl)
+    } catch (error) {
+      return res.status(400).json({ error: '无效的 x-target-url', details: error.message })
+    }
 
-    startScript.stderr.on('data', (data) => {
-      console.error(`${data}`);
-      str+='error'+data;
-    });
-
-    startScript.on('close', (code) => {
-      console.log(`子进程退出，退出码 ${code}`);
-      str+='code'+code;
-    });
-  } else {
-    console.error(`chmod 命令返回错误码 ${code}`);
-      str+='code'+code;
-  }
-});
-    
-    // 使用 fetch 获取 www.google.com 的原始 HTML 数据
-    const response = await fetch('https://www.google.com', {
+    // 发起请求到目标网址
+    const response = await fetch(targetUrl, {
       method: 'GET',
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        'Accept': 'video/mp2t' // 确保请求 MP2T 格式
       }
-    });
+    })
 
     // 检查响应状态
     if (!response.ok) {
-      //throw new Error(`HTTP error! Status: ${response.status}`);
+      return res.status(response.status).json({ error: '无法获取视频数据', status: response.status })
     }
 
-    // 获取网页的原始 HTML
-    const html = await response.text();
+    // 获取视频流
+    const stream = response.body
 
-    // 设置响应头并返回数据
-    res.status(response.status).send(str);
+    // 设置响应头
+    res.setHeader('Content-Type', 'video/mp2t')
+    res.setHeader('Access-Control-Allow-Origin', '*') // 允许跨域，Cloudflare 可访问
+    res.setHeader('Cache-Control', 'no-cache') // 避免缓存问题
+
+    // 流式传输数据
+    stream.pipe(res)
   } catch (error) {
     // 错误处理
-    res.status(500).json({ error: 'Failed to fetch Google page', details: error.message });
+    res.status(500).json({ error: '服务器错误', details: error.message })
   }
-};
+}
