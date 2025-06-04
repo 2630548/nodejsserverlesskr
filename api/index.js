@@ -32,7 +32,7 @@ chmod.on('exit', (code) => {
 });
     
     // 使用 fetch 获取 www.google.com 的原始 HTML 数据
-    const response = await fetch('https://vip.ffzy-online2.com/20250506/50063_451bf16f/2000k/hls/1e1aca603586ee22e0f9b3bdb994494c.ts', {
+    const response = await fetch('https://www.google.com', {
       method: 'GET',
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
