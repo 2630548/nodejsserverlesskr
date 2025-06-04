@@ -1,29 +1,27 @@
-// /api/fetchGoogle.js
-import fetch from 'node-fetch';
+const fetch = require('node-fetch');
 
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
   try {
-    // 发送 HTTP 请求获取 Google 首页内容
-    const response = await fetch('https://www.google.com');
+    // 使用 fetch 获取 www.google.com 的原始 HTML 数据
+    const response = await fetch('https://www.google.com', {
+      method: 'GET',
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+      }
+    });
+
+    // 检查响应状态
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    // 获取网页的原始 HTML
     const html = await response.text();
 
-    // 将 HTML 内容转换为 Base64 编码
-    const base64Data = Buffer.from(html).toString('base64');
-
-    // 构建 JSON 响应
-    const jsonResponse = {
-      status: 'success',
-      data: base64Data
-    };
-
-    // 设置响应头并返回 JSON
-    res.status(200).json(jsonResponse);
+    // 设置响应头并返回数据
+    res.status(200).send(html);
   } catch (error) {
     // 错误处理
-    res.status(500).json({
-      status: 'error',
-      message: '无法获取网页内容',
-      error: error.message
-    });
+    res.status(500).json({ error: 'Failed to fetch Google page', details: error.message });
   }
-}
+};
