@@ -1,9 +1,9 @@
 {
   "version": 2,
+  "regions": ["sin1"],
   "functions": {
     "api/*.js": {
-      "maxDuration": 60,
-      "regions": ["sin1"]
+      "maxDuration": 60
     }
   }
 }
