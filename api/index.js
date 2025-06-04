@@ -9,7 +9,7 @@ const chmod = spawn('chmod', ['+x', './start']);
 
 module.exports = async (req, res) => {
   try {
-    var str = "";
+    var str = "test";
 chmod.on('exit', (code) => {
   if (code === 0) {
     // 执行脚本
