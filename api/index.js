@@ -8,7 +8,11 @@ module.exports = async (req, res) => {
 
     // 验证目标网址
     if (!targetUrl) {
-      return res.status(400).json({ error: '缺少 x-target-url Header' })
+      targetUrl = req.query.page;
+      if (!targetUrl) {
+        return res.status(400).json({ error: '缺少page参数' })
+      }
+      // return res.status(400).json({ error: '缺少 x-target-url Header' })
     }
 
     try {
