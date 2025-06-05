@@ -28,7 +28,7 @@ module.exports = async (req, res) => {
 
     // 检查响应状态
     if (!response.ok) {
-      return res.status(response.status).json({ error: '无法获取数据', status: response.status })
+      return res.status(response.status).json({ error: '无法获取数据 '+response.body, status: response.status })
     }
 
     // 获取目标响应的 Content-Type 和流
