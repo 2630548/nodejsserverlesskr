@@ -3,7 +3,7 @@ const fetch = require('node-fetch')
 module.exports = async (req, res) => {
   try {
     // 从 Header 获取目标网址和文件名
-    const targetUrl = req.headers['x-target-url']
+    var targetUrl = req.headers['x-target-url']
     const filename = req.headers['x-filename'] || 'video.ts'
 
     // 验证目标网址
